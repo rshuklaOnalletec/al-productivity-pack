@@ -2,7 +2,7 @@
   "name": "al-productivity-pack",
   "displayName": "AL Productivity Pack",
   "description": "A suite of productivity tools for Business Central AL developers — Event Subscriber Finder, boilerplate generation, event chain visualization, and more.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "RishabhShukla",
   "author": {
     "name": "Rishabh Shukla"
