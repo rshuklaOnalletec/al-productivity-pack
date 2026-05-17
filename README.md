@@ -41,13 +41,13 @@ Every Business Central developer knows the pain:
 
 Search and discover all published events across your workspace — including the Base Application symbols.
 
-**Command:** `AL: Find Published Events`
+**Command:** `ALP: Find Published Events`
 
 - Instantly search by event name, object name, or parameters
 - Navigate directly to the event definition
 - Supports `IntegrationEvent`, `BusinessEvent`, and `InternalEvent` types
 
-![Event Finder Demo](resources/demo-find-events.gif)
+![Event Subscriber Trace](resources/demo/event-subscriber-trace.gif)
 
 ---
 
@@ -183,6 +183,8 @@ code --install-extension al-productivity-pack-0.1.0.vsix
 ---
 
 ## Configuration
+
+![Settings](resources/demo/setting-for-project.gif)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
