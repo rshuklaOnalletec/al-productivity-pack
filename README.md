@@ -111,12 +111,57 @@ Find subscribers in your code that point to events which no longer exist.
 
 ### 🌳 AL Events Explorer (Tree View)
 
-A dedicated tree view in the Explorer sidebar showing all events grouped by object.
+A dedicated tree view in the Activity Bar showing all events grouped by object.
 
 - Grouped by object type and name
 - Click to navigate to event source
 - Tooltip with full event details
 - Auto-refreshes on file changes
+
+---
+
+### 🔀 Cross-Extension Dependency Explorer
+
+Track how your apps depend on each other across a multi-app workspace.
+
+- See which projects extend your tables, pages, enums, and codeunits
+- Track field references and Record variable usage across projects
+- Detect cross-project dependencies instantly
+- Tree view in the Activity Bar with full drill-down
+
+---
+
+### 📦 App Dependency Graph (Deploy Sequence)
+
+Visualize the deployment order for all your apps.
+
+**Command:** `ALP: Show App Dependency Graph`
+
+- Numbered deploy sequence — exact order to publish
+- Clickable items — jump directly to each app's `app.json`
+- Parallel deploy detection (apps with no interdependency)
+- External dependencies grouped by publisher (Microsoft, Lanham, EOS, etc.)
+- Scans workspace + sibling project folders automatically
+
+---
+
+### 📄 File Insights
+
+One-click summary of the current AL file — right from the editor title bar.
+
+**Command:** `ALP: File Insights`
+
+- Objects, events, subscribers, fields, extensions, and cross-references in the file
+- Quick navigation to any item
+- Editor title button (icon) for instant access
+
+---
+
+### 🖱️ Right-Click Context Menus
+
+- **Peek Subscribers at Cursor** — right-click any event to see all subscribers
+- **Peek Cross-References at Cursor** — right-click any AL symbol to find who uses it
+- **Generate Subscriber for Event** — right-click an event to scaffold a subscriber
 
 ---
 
@@ -163,12 +208,16 @@ code --install-extension al-productivity-pack-0.1.0.vsix
 
 | Command | Description |
 |---------|-------------|
-| `AL: Find Published Events` | Search all indexed events with quick-pick |
-| `AL: Find Event Subscribers` | Browse all subscribers in workspace |
-| `AL: Generate Event Subscriber Boilerplate` | Pick an event and insert subscriber code |
-| `AL: Show Event Chain` | Visualize event flow for an object |
-| `AL: Detect Dead Subscribers` | Find subscribers with missing targets |
-| `AL: Refresh Event Index` | Manually rebuild the event index |
+| `ALP: Find Published Events` | Search all indexed events with quick-pick |
+| `ALP: Find Event Subscribers` | Browse all subscribers in workspace |
+| `ALP: Generate Event Subscriber Boilerplate` | Pick an event and insert subscriber code |
+| `ALP: Show Event Chain` | Visualize event flow for an object |
+| `ALP: Detect Dead Subscribers` | Find subscribers with missing targets |
+| `ALP: Refresh Event Index` | Manually rebuild the event index |
+| `ALP: Peek Subscribers at Cursor` | Show subscribers for event under cursor |
+| `ALP: Peek Cross-References at Cursor` | Show cross-project references for symbol |
+| `ALP: File Insights` | Summary of current file's AL objects |
+| `ALP: Show App Dependency Graph` | Deploy sequence visualization |
 
 ---
 
@@ -183,10 +232,10 @@ code --install-extension al-productivity-pack-0.1.0.vsix
 
 ## Roadmap
 
-- [ ] **v0.2** — CodeLens showing subscriber count on each published event
-- [ ] **v0.3** — Event comparison between BC versions (detect breaking changes)
-- [ ] **v0.4** — AL Test Helper tools
-- [ ] **v0.5** — Object ID conflict detection across extensions
+- [x] **v0.1** — Event Subscriber Finder, CodeLens, Dependency Explorer, App Dependency Graph
+- [ ] **v0.2** — Event comparison between BC versions (detect breaking changes)
+- [ ] **v0.3** — AL Test Helper tools
+- [ ] **v0.4** — Object ID conflict detection across extensions
 - [ ] **v1.0** — Stable release with full feature set
 
 See the [CHANGELOG](CHANGELOG.md) for release history.
