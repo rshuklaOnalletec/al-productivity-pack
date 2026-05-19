@@ -1,0 +1,10 @@
+# Post a General Journal entry
+Open "General Journal"
+Set "Document Type" = "Payment"
+Set "Account Type" = "Customer"
+Set "Account No." = "10000"
+Set "Amount" = "-500"
+Set "Bal. Account Type" = "G/L Account"
+Set "Bal. Account No." = "2910"
+Click "Post"
+Confirm "Yes"

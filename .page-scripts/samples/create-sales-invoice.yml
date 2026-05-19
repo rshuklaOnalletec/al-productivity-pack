@@ -1,0 +1,94 @@
+name: create-sales-invoice
+description: Sample: create-sales-invoice
+telemetryId: d87d0a26-1e4e-4565-94b4-5b4074fe28c2
+start:
+  profile: BUSINESS MANAGER
+steps:
+  - type: navigate
+    target:
+      - page: Sales Invoice List
+    description: Navigate to Sales Invoice List
+  - type: page-shown
+    source:
+      page: Sales Invoice List
+    modal: false
+    runtimeId: bd0d
+    description: Page <caption>Sales Invoice List</caption> was shown.
+  - type: invoke
+    target:
+      - page: Sales Invoice List
+        runtimeRef: bd0d
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Sales Invoice
+    modal: false
+    runtimeId: b070
+    description: Page <caption>Sales Invoice</caption> was shown.
+  - type: input
+    target:
+      - page: Sales Invoice
+        runtimeRef: b070
+      - field: Sell-to Customer Name
+    value: "10000"
+    description: Input <value>10000</value> into <caption>Sell-to Customer Name</caption>
+  - type: input
+    target:
+      - page: Sales Invoice
+        runtimeRef: b070
+      - part: SalesLines
+      - page: Sales Invoice Subform
+      - repeater: Control1
+      - field: No.
+    value: "1000"
+    description: Input <value>1000</value> into <caption>No.</caption>
+  - type: input
+    target:
+      - page: Sales Invoice
+        runtimeRef: b070
+      - part: SalesLines
+      - page: Sales Invoice Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "2"
+    description: Input <value>2</value> into <caption>Quantity</caption>
+  - type: input
+    target:
+      - page: Sales Invoice
+        runtimeRef: b070
+      - part: SalesLines
+      - page: Sales Invoice Subform
+      - repeater: Control1
+      - field: Unit Price
+    value: "50"
+    description: Input <value>50</value> into <caption>Unit Price</caption>
+  - type: invoke
+    target:
+      - page: Sales Invoice
+        runtimeRef: b070
+      - action: Post
+    parameters: {}
+    description: Invoke <caption>Post</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: b610
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: b610
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: b610
+    description: Page <caption>Confirm</caption> was closed.

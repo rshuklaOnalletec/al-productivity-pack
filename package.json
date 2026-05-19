@@ -1,8 +1,8 @@
 {
   "name": "al-productivity-pack",
   "displayName": "AL Productivity Pack",
-  "description": "A suite of productivity tools for Business Central AL developers — Event Subscriber Finder, boilerplate generation, event chain visualization, and more.",
-  "version": "0.1.2",
+  "description": "A suite of productivity tools for Business Central AL developers — Event Subscriber Finder, boilerplate generation, event chain visualization, Page Script generation, and more.",
+  "version": "0.2.0",
   "publisher": "RishabhShukla",
   "author": {
     "name": "Rishabh Shukla"
@@ -89,6 +89,11 @@
         "command": "alProductivityPack.showAppDependencyGraph",
         "title": "ALP: Show App Dependency Graph",
         "icon": "$(type-hierarchy)"
+      },
+      {
+        "command": "alProductivityPack.generatePageScript",
+        "title": "ALP: Generate Page Script from Repro Steps",
+        "icon": "$(play-circle)"
       }
     ],
     "viewsContainers": {

@@ -7,6 +7,7 @@ import { EventSubscriberCodeLensProvider } from './features/eventSubscriberFinde
 import { DependencyIndexer } from './features/dependencyExplorer/dependencyIndexer';
 import { DependencyTreeProvider } from './features/dependencyExplorer/dependencyTreeView';
 import { AppDependencyGraph } from './features/dependencyExplorer/appDependencyGraph';
+import { generatePageScriptCommand } from './features/pageScriptGenerator';
 
 let eventIndexer: EventIndexer;
 let subscriberMapper: SubscriberMapper;
@@ -598,7 +599,9 @@ export function activate(context: vscode.ExtensionContext) {
                     await editor.insertSnippet(new vscode.SnippetString('\n' + snippet + '\n\n'));
                 }
             }
-        })
+        }),
+
+        vscode.commands.registerCommand('alProductivityPack.generatePageScript', generatePageScriptCommand)
     );
 
     // Auto-index on activation

@@ -1,0 +1,87 @@
+name: post-general-journal
+description: Sample: post-general-journal
+telemetryId: 7c27b193-7290-434d-8001-c45cb39710de
+start:
+  profile: BUSINESS MANAGER
+steps:
+  # Post a General Journal entry
+  - type: navigate
+    target:
+      - page: General Journal
+    description: Navigate to General Journal
+  - type: page-shown
+    source:
+      page: General Journal
+    modal: false
+    runtimeId: b13d
+    description: Page <caption>General Journal</caption> was shown.
+  - type: input
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - field: Document Type
+    value: "Payment"
+    description: Input <value>Payment</value> into <caption>Document Type</caption>
+  - type: input
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - field: Account Type
+    value: "Customer"
+    description: Input <value>Customer</value> into <caption>Account Type</caption>
+  - type: input
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - field: Account No.
+    value: "10000"
+    description: Input <value>10000</value> into <caption>Account No.</caption>
+  - type: input
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - field: Amount
+    value: "-500"
+    description: Input <value>-500</value> into <caption>Amount</caption>
+  - type: input
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - field: Bal. Account Type
+    value: "G/L Account"
+    description: Input <value>G/L Account</value> into <caption>Bal. Account Type</caption>
+  - type: input
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - field: Bal. Account No.
+    value: "2910"
+    description: Input <value>2910</value> into <caption>Bal. Account No.</caption>
+  - type: invoke
+    target:
+      - page: General Journal
+        runtimeRef: b13d
+      - action: Post
+    parameters: {}
+    description: Invoke <caption>Post</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: bba4
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: bba4
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: bba4
+    description: Page <caption>Confirm</caption> was closed.

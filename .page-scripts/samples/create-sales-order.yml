@@ -1,0 +1,159 @@
+name: create-sales-order
+description: Sample: create-sales-order
+telemetryId: 03b42492-81a5-4794-ac83-229d331958b9
+start:
+  profile: BUSINESS MANAGER
+steps:
+  - type: navigate
+    target:
+      - page: Sales Order List
+    description: Navigate to Sales Order List
+  - type: page-shown
+    source:
+      page: Sales Order List
+    modal: false
+    runtimeId: b9bd
+    description: Page <caption>Sales Order List</caption> was shown.
+  - type: invoke
+    target:
+      - page: Sales Order List
+        runtimeRef: b9bd
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Sales Order
+    modal: false
+    runtimeId: be36
+    description: Page <caption>Sales Order</caption> was shown.
+  - type: input
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - field: Sell-to Customer Name
+    value: "10000"
+    description: Input <value>10000</value> into <caption>Sell-to Customer Name</caption>
+  - type: input
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - field: Requested Delivery Date
+    value: "t"
+    description: Input <value>t</value> into <caption>Requested Delivery Date</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: b855
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: b855
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: b855
+    description: Page <caption>Confirm</caption> was closed.
+  - type: input
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - part: SalesLines
+      - page: Sales Order Subform
+      - repeater: Control1
+      - field: No.
+    value: "1000"
+    description: Input <value>1000</value> into <caption>No.</caption>
+  - type: input
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - part: SalesLines
+      - page: Sales Order Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "5"
+    description: Input <value>5</value> into <caption>Quantity</caption>
+  - type: input
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - part: SalesLines
+      - page: Sales Order Subform
+      - repeater: Control1
+      - field: Unit Price
+    value: "100"
+    description: Input <value>100</value> into <caption>Unit Price</caption>
+  - type: invoke
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - action: Release
+    parameters: {}
+    description: Invoke <caption>Release</caption>
+  - type: invoke
+    target:
+      - page: Sales Order
+        runtimeRef: be36
+      - action: Post
+    parameters: {}
+    description: Invoke <caption>Post</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Choose
+    modal: true
+    runtimeId: b70f
+    description: Page <caption>Choose</caption> was shown.
+  - type: input
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: b70f
+      - field: "AL:STRMENU"
+    value: 2
+    description: Input <value>2</value> into <caption>AL:STRMENU</caption>
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: b70f
+    invokeType: Ok
+    description: Invoke Ok on <caption>Choose</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: b70f
+    description: Page <caption>Choose</caption> was closed.
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: bb02
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: bb02
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: bb02
+    description: Page <caption>Confirm</caption> was closed.

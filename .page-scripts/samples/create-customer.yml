@@ -1,0 +1,85 @@
+name: create-customer
+description: Sample: create-customer
+telemetryId: 964e3bf8-c328-416a-bed2-ebbdc90f080e
+start:
+  profile: BUSINESS MANAGER
+steps:
+  - type: navigate
+    target:
+      - page: Customer List
+    description: Navigate to Customer List
+  - type: page-shown
+    source:
+      page: Customer List
+    modal: false
+    runtimeId: b54b
+    description: Page <caption>Customer List</caption> was shown.
+  - type: invoke
+    target:
+      - page: Customer List
+        runtimeRef: b54b
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Customer Card
+    modal: false
+    runtimeId: ba1a
+    description: Page <caption>Customer Card</caption> was shown.
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: Name
+    value: "Test Customer Ltd"
+    description: Input <value>Test Customer Ltd</value> into <caption>Name</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: Address
+    value: "123 Test Street"
+    description: Input <value>123 Test Street</value> into <caption>Address</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: City
+    value: "London"
+    description: Input <value>London</value> into <caption>City</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: Post Code
+    value: "EC1A 1BB"
+    description: Input <value>EC1A 1BB</value> into <caption>Post Code</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: Phone No.
+    value: "020 1234 5678"
+    description: Input <value>020 1234 5678</value> into <caption>Phone No.</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: Gen. Bus. Posting Group
+    value: "DOMESTIC"
+    description: Input <value>DOMESTIC</value> into <caption>Gen. Bus. Posting Group</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: VAT Bus. Posting Group
+    value: "DOMESTIC"
+    description: Input <value>DOMESTIC</value> into <caption>VAT Bus. Posting Group</caption>
+  - type: input
+    target:
+      - page: Customer Card
+        runtimeRef: ba1a
+      - field: Customer Posting Group
+    value: "DOMESTIC"
+    description: Input <value>DOMESTIC</value> into <caption>Customer Posting Group</caption>

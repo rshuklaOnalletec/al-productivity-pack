@@ -1,0 +1,78 @@
+name: create-item
+description: Sample: create-item
+telemetryId: e47e236c-7b26-42e0-a67e-0263afc0cf28
+start:
+  profile: BUSINESS MANAGER
+steps:
+  - type: navigate
+    target:
+      - page: Item List
+    description: Navigate to Item List
+  - type: page-shown
+    source:
+      page: Item List
+    modal: false
+    runtimeId: bb9d
+    description: Page <caption>Item List</caption> was shown.
+  - type: invoke
+    target:
+      - page: Item List
+        runtimeRef: bb9d
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Item Card
+    modal: false
+    runtimeId: b093
+    description: Page <caption>Item Card</caption> was shown.
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: Description
+    value: "Test Item"
+    description: Input <value>Test Item</value> into <caption>Description</caption>
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: Unit Price
+    value: "99.99"
+    description: Input <value>99.99</value> into <caption>Unit Price</caption>
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: Unit Cost
+    value: "50.00"
+    description: Input <value>50.00</value> into <caption>Unit Cost</caption>
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: Gen. Prod. Posting Group
+    value: "RETAIL"
+    description: Input <value>RETAIL</value> into <caption>Gen. Prod. Posting Group</caption>
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: VAT Prod. Posting Group
+    value: "VAT25"
+    description: Input <value>VAT25</value> into <caption>VAT Prod. Posting Group</caption>
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: Inventory Posting Group
+    value: "RESALE"
+    description: Input <value>RESALE</value> into <caption>Inventory Posting Group</caption>
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b093
+      - field: Base Unit of Measure
+    value: "PCS"
+    description: Input <value>PCS</value> into <caption>Base Unit of Measure</caption>

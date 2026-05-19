@@ -1,0 +1,13 @@
+Open "Sales Order List"
+Click "New"
+Open "Sales Order"
+Set "Sell-to Customer Name" = "10000"
+Set "Requested Delivery Date" = "t"
+Confirm "Yes"
+In "SalesLines" Set "No." = "1000"
+In "SalesLines" Set "Quantity" = "5"
+In "SalesLines" Set "Unit Price" = "100"
+Click "Release"
+Click "Post"
+Choose 2
+Confirm "Yes"

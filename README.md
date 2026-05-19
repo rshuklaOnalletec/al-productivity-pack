@@ -157,6 +157,41 @@ One-click summary of the current AL file — right from the editor title bar.
 
 ---
 
+### 🎬 Page Script Generator
+
+Convert human-readable repro steps into BC Page Scripting YAML — ready to run in Business Central's test automation.
+
+**Command:** `ALP: Generate Page Script from Repro Steps`
+
+- Write steps in natural DSL: `Open`, `Click`, `Set`, `Confirm`, `Choose`, `Validate`, `Wait`
+- Quotes optional on field names — `Set Name = "Value"` works just like `Set "Name" = "Value"`
+- Intelligent field resolution from AL page sources (workspace + `.alpackages`)
+- QuickPick field selector when mapping is needed — browse all fields on the page
+- Handles Confirm/Choose dialogs with correct automationIds
+- Subpage/lines input with proper part → page → repeater path
+- Output saved to `.page-scripts/` directory
+
+**DSL Example:**
+```
+Open "Purchase Order List"
+Click "New"
+Set Buy-from Vendor Name = "10000"
+In "PurchLines" Set No. = "1000"
+In "PurchLines" Set Quantity = "1"
+Click "Release"
+Click "Post"
+Choose 2
+Confirm "Yes"
+```
+
+![Page Script Generation](resources/demo/page-script-generation.gif)
+
+**Running in Business Central:**
+
+![Page Script Usage in BC](resources/demo/page-script-usage-in-bc.gif)
+
+---
+
 ### 🖱️ Right-Click Context Menus
 
 - **Peek Subscribers at Cursor** — right-click any event to see all subscribers
@@ -177,7 +212,7 @@ One-click summary of the current AL file — right from the editor title bar.
 ### From VSIX (Manual)
 
 ```bash
-code --install-extension al-productivity-pack-0.1.0.vsix
+code --install-extension al-productivity-pack-0.2.0.vsix
 ```
 
 ---
@@ -220,6 +255,7 @@ code --install-extension al-productivity-pack-0.1.0.vsix
 | `ALP: Peek Cross-References at Cursor` | Show cross-project references for symbol |
 | `ALP: File Insights` | Summary of current file's AL objects |
 | `ALP: Show App Dependency Graph` | Deploy sequence visualization |
+| `ALP: Generate Page Script from Repro Steps` | Convert DSL repro steps to BC Page Script YAML |
 
 ---
 
@@ -235,9 +271,10 @@ code --install-extension al-productivity-pack-0.1.0.vsix
 ## Roadmap
 
 - [x] **v0.1** — Event Subscriber Finder, CodeLens, Dependency Explorer, App Dependency Graph
-- [ ] **v0.2** — Event comparison between BC versions (detect breaking changes)
-- [ ] **v0.3** — AL Test Helper tools
-- [ ] **v0.4** — Object ID conflict detection across extensions
+- [x] **v0.2** — Page Script Generator (DSL → BC Page Scripting YAML)
+- [ ] **v0.3** — Event comparison between BC versions (detect breaking changes)
+- [ ] **v0.4** — AL Test Helper tools
+- [ ] **v0.5** — Object ID conflict detection across extensions
 - [ ] **v1.0** — Stable release with full feature set
 
 See the [CHANGELOG](CHANGELOG.md) for release history.

@@ -1,0 +1,11 @@
+Open "Purchase Order List"
+Click "New"
+Open "Purchase Order"
+Set "Buy-from Vendor Name" = "10000"
+Set "Requested Delivery Date" = "t"
+In "PurchLines" Set "No." = "1000"
+In "PurchLines" Set "Quantity" = "1"
+Click "Release"
+Click "Post"
+Choose 2
+Confirm "Yes"

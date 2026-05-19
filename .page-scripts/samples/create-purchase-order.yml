@@ -1,0 +1,128 @@
+name: create-purchase-order
+description: Sample: create-purchase-order
+telemetryId: 9ce8d9b5-3ebf-45dc-8a65-21bcdd6cad7b
+start:
+  profile: BUSINESS MANAGER
+steps:
+  - type: navigate
+    target:
+      - page: Purchase Order List
+    description: Navigate to Purchase Order List
+  - type: page-shown
+    source:
+      page: Purchase Order List
+    modal: false
+    runtimeId: b52f
+    description: Page <caption>Purchase Order List</caption> was shown.
+  - type: invoke
+    target:
+      - page: Purchase Order List
+        runtimeRef: b52f
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Purchase Order
+    modal: false
+    runtimeId: b9b6
+    description: Page <caption>Purchase Order</caption> was shown.
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: b9b6
+      - field: Buy-from Vendor Name
+    value: "10000"
+    description: Input <value>10000</value> into <caption>Buy-from Vendor Name</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: b9b6
+      - field: Requested Delivery Date
+    value: "t"
+    description: Input <value>t</value> into <caption>Requested Delivery Date</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: b9b6
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: No.
+    value: "1000"
+    description: Input <value>1000</value> into <caption>No.</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: b9b6
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "1"
+    description: Input <value>1</value> into <caption>Quantity</caption>
+  - type: invoke
+    target:
+      - page: Purchase Order
+        runtimeRef: b9b6
+      - action: Release
+    parameters: {}
+    description: Invoke <caption>Release</caption>
+  - type: invoke
+    target:
+      - page: Purchase Order
+        runtimeRef: b9b6
+      - action: Post
+    parameters: {}
+    description: Invoke <caption>Post</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Choose
+    modal: true
+    runtimeId: bf62
+    description: Page <caption>Choose</caption> was shown.
+  - type: input
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: bf62
+      - field: "AL:STRMENU"
+    value: 2
+    description: Input <value>2</value> into <caption>AL:STRMENU</caption>
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: bf62
+    invokeType: Ok
+    description: Invoke Ok on <caption>Choose</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: bf62
+    description: Page <caption>Choose</caption> was closed.
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: baa1
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: baa1
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: baa1
+    description: Page <caption>Confirm</caption> was closed.
