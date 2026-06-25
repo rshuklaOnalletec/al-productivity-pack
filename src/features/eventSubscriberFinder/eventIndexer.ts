@@ -1,12 +1,61 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 import { ALEvent, ALObject, ALSubscriber } from '../../types';
 import { parseALFile } from '../../utils/alParser';
+
+const INDEX_FILE = '.alp-index/events.json';
 
 export class EventIndexer {
     private events: ALEvent[] = [];
     private subscribers: ALSubscriber[] = [];
     private objects: ALObject[] = [];
     private isIndexing = false;
+
+    /**
+     * Try to load a previously saved index from disk. Returns true if loaded successfully.
+     */
+    async loadFromCache(): Promise<boolean> {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) { return false; }
+
+        const cacheFile = path.join(workspaceFolders[0].uri.fsPath, INDEX_FILE);
+        if (!fs.existsSync(cacheFile)) { return false; }
+
+        try {
+            const raw = fs.readFileSync(cacheFile, 'utf8');
+            const data = JSON.parse(raw);
+            if (data.events && data.subscribers && data.objects) {
+                this.events = data.events;
+                this.subscribers = data.subscribers;
+                this.objects = data.objects;
+                console.log(`AL Productivity Pack: Loaded cached index (${this.events.length} events, ${this.subscribers.length} subscribers)`);
+                return true;
+            }
+        } catch { /* corrupt cache — will re-index */ }
+        return false;
+    }
+
+    /**
+     * Save the current index to disk.
+     */
+    private saveToCache(): void {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) { return; }
+
+        const cacheDir = path.join(workspaceFolders[0].uri.fsPath, '.alp-index');
+        if (!fs.existsSync(cacheDir)) {
+            fs.mkdirSync(cacheDir, { recursive: true });
+        }
+
+        const cacheFile = path.join(cacheDir, 'events.json');
+        fs.writeFileSync(cacheFile, JSON.stringify({
+            events: this.events,
+            subscribers: this.subscribers,
+            objects: this.objects,
+            timestamp: Date.now()
+        }), 'utf8');
+    }
 
     async indexWorkspace(): Promise<void> {
         if (this.isIndexing) {
@@ -78,6 +127,7 @@ export class EventIndexer {
             );
 
             console.log(`AL Productivity Pack: Indexed ${this.events.length} events (${this.events.filter(e => e.source === 'dependency').length} from dependencies), ${this.subscribers.length} subscribers from ${allFiles.length} files`);
+            this.saveToCache();
         } finally {
             this.isIndexing = false;
         }

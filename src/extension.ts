@@ -8,12 +8,14 @@ import { DependencyIndexer } from './features/dependencyExplorer/dependencyIndex
 import { DependencyTreeProvider } from './features/dependencyExplorer/dependencyTreeView';
 import { AppDependencyGraph } from './features/dependencyExplorer/appDependencyGraph';
 import { generatePageScriptCommand } from './features/pageScriptGenerator';
+import { generateDataverseIntegrationCommand } from './features/dataverseIntegration';
+import { clearDataverseTokenCache } from './features/dataverseIntegration/wizardFlow';
 
 let eventIndexer: EventIndexer;
 let subscriberMapper: SubscriberMapper;
 let dependencyIndexer: DependencyIndexer;
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
     console.log('AL Productivity Pack is now active');
 
     eventIndexer = new EventIndexer();
@@ -601,35 +603,47 @@ export function activate(context: vscode.ExtensionContext) {
             }
         }),
 
-        vscode.commands.registerCommand('alProductivityPack.generatePageScript', generatePageScriptCommand)
+        vscode.commands.registerCommand('alProductivityPack.generatePageScript', generatePageScriptCommand),
+
+        vscode.commands.registerCommand('alProductivityPack.generateDataverseIntegration', async () => {
+            try {
+                vscode.window.showInformationMessage('ALP Dataverse wizard started.');
+                await generateDataverseIntegrationCommand();
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                vscode.window.showErrorMessage(`ALP Dataverse command failed: ${message}`);
+                console.error('ALP Dataverse command failed:', error);
+            }
+        }),
+
+        vscode.commands.registerCommand('alProductivityPack.clearDataverseCredentials', () => {
+            clearDataverseTokenCache();
+        })
     );
 
-    // Auto-index on activation
-    const config = vscode.workspace.getConfiguration('alProductivityPack');
-    if (config.get<boolean>('autoRefresh', true)) {
+    // Load index from cache on activation, or re-index if no cache exists
+    const eventsLoaded = await eventIndexer.loadFromCache();
+    const depsLoaded = await dependencyIndexer.loadFromCache();
+
+    if (eventsLoaded) {
+        treeProvider.refresh();
+        codeLensProvider.refresh();
+    }
+    if (depsLoaded) {
+        dependencyTreeProvider.refresh();
+    }
+
+    // If no cached index, do a full index once
+    if (!eventsLoaded) {
         eventIndexer.indexWorkspace().then(() => {
             treeProvider.refresh();
             codeLensProvider.refresh();
         });
+    }
+    if (!depsLoaded) {
         dependencyIndexer.indexWorkspace().then(() => {
             dependencyTreeProvider.refresh();
         });
-
-        // Watch for file changes
-        const watcher = vscode.workspace.createFileSystemWatcher('**/*.al');
-        watcher.onDidChange(() => {
-            eventIndexer.indexWorkspace().then(() => { treeProvider.refresh(); codeLensProvider.refresh(); });
-            dependencyIndexer.indexWorkspace().then(() => { dependencyTreeProvider.refresh(); });
-        });
-        watcher.onDidCreate(() => {
-            eventIndexer.indexWorkspace().then(() => { treeProvider.refresh(); codeLensProvider.refresh(); });
-            dependencyIndexer.indexWorkspace().then(() => { dependencyTreeProvider.refresh(); });
-        });
-        watcher.onDidDelete(() => {
-            eventIndexer.indexWorkspace().then(() => { treeProvider.refresh(); codeLensProvider.refresh(); });
-            dependencyIndexer.indexWorkspace().then(() => { dependencyTreeProvider.refresh(); });
-        });
-        context.subscriptions.push(watcher);
     }
 }
 

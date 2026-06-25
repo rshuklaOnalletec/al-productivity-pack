@@ -1,12 +1,61 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 import { ALField, ALExtension, ALReference } from '../../types';
 import { parseDependencies } from '../../utils/dependencyParser';
+
+const INDEX_FILE = '.alp-index/dependencies.json';
 
 export class DependencyIndexer {
     private fields: ALField[] = [];
     private extensions: ALExtension[] = [];
     private references: ALReference[] = [];
     private isIndexing = false;
+
+    /**
+     * Try to load a previously saved index from disk. Returns true if loaded successfully.
+     */
+    async loadFromCache(): Promise<boolean> {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) { return false; }
+
+        const cacheFile = path.join(workspaceFolders[0].uri.fsPath, INDEX_FILE);
+        if (!fs.existsSync(cacheFile)) { return false; }
+
+        try {
+            const raw = fs.readFileSync(cacheFile, 'utf8');
+            const data = JSON.parse(raw);
+            if (data.fields && data.extensions && data.references) {
+                this.fields = data.fields;
+                this.extensions = data.extensions;
+                this.references = data.references;
+                console.log(`AL Dependency Index: Loaded cached index (${this.fields.length} fields, ${this.extensions.length} extensions, ${this.references.length} references)`);
+                return true;
+            }
+        } catch { /* corrupt cache — will re-index */ }
+        return false;
+    }
+
+    /**
+     * Save the current index to disk.
+     */
+    private saveToCache(): void {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) { return; }
+
+        const cacheDir = path.join(workspaceFolders[0].uri.fsPath, '.alp-index');
+        if (!fs.existsSync(cacheDir)) {
+            fs.mkdirSync(cacheDir, { recursive: true });
+        }
+
+        const cacheFile = path.join(cacheDir, 'dependencies.json');
+        fs.writeFileSync(cacheFile, JSON.stringify({
+            fields: this.fields,
+            extensions: this.extensions,
+            references: this.references,
+            timestamp: Date.now()
+        }), 'utf8');
+    }
 
     async indexWorkspace(): Promise<void> {
         if (this.isIndexing) {
@@ -80,6 +129,7 @@ export class DependencyIndexer {
             );
 
             console.log(`AL Dependency Index: ${this.fields.length} fields, ${this.extensions.length} extensions, ${this.references.length} references`);
+            this.saveToCache();
         } finally {
             this.isIndexing = false;
         }

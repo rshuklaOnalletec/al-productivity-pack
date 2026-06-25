@@ -5,6 +5,21 @@ All notable changes to the "AL Productivity Pack" extension will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-06-24
+
+### Added
+
+- **Dataverse Integration Generator** — Wizard-driven generation of complete Dataverse coupling boilerplate
+  - Single-screen webview wizard: entity picker (live from Dataverse API), BC table selector, base object ID
+  - OAuth2 Device Code Flow with session-scoped token caching
+  - Runs `altpgen.exe` to generate CDS table definitions from Dataverse metadata
+  - Parses generated AL table to extract real field names, IDs, and primary keys
+  - Auto-detects target BC page from table's `LookupPageId` → `CardPageId` properties
+  - Professional field mapping webview with dropdown pairing, direction toggle, auto-match, search/filter
+  - Generates: Coupling Codeunit (with `Match`/`UpdateOne` logic), List Page, and Page Extension
+- **Clear Dataverse Credential Cache** command (`ALP: Clear Dataverse Credential Cache`)
+- New settings: `dataverse.serviceUrl`, `dataverse.clientId`, `dataverse.redirectUri`, `dataverse.altpgenPath`
+
 ## [0.2.0] - 2026-05-19
 
 ### Added

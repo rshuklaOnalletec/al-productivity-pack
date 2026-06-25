@@ -192,6 +192,43 @@ Confirm "Yes"
 
 ---
 
+### ☁️ Dataverse Integration Generator
+
+Generate complete Dataverse integration boilerplate — coupling codeunit, list page, and page extension — from a guided wizard.
+
+**Command:** `ALP: Generate Dataverse Integration Boilerplate`
+
+- Single-screen wizard: pick a Dataverse entity, target BC table, and base object ID
+- **Live entity lookup** from your Dataverse environment (OAuth2 Device Code Flow)
+- Token caching — authenticate once per session, reuse silently
+- Runs `altpgen.exe` under the hood to generate the CDS table definition
+- Parses the generated table to extract real field names, IDs, and primary keys
+- **Auto-detects** the target page from the BC table's `LookupPageId` / `CardPageId` properties
+- Professional **field mapping webview** with:
+  - Dropdown-based BC → Dataverse column pairing
+  - Smart auto-match (name similarity) pre-populated
+  - Per-field direction toggle (↔ Bidirectional, → To DV, ← From DV)
+  - Search/filter, stats bar, Clear All / Auto-Match buttons
+- Generates:
+  - **Coupling Codeunit** — full `Match()`, `UpdateOne()` logic with correct field mappings
+  - **List Page** — Dataverse entity list with coupling actions
+  - **Page Extension** — Coupled indicator & sync action on the detected card/list page
+
+**Prerequisites:**
+- AL Language extension installed (provides `altpgen.exe`)
+- Microsoft Entra app registration with **public client flow** enabled
+- Dataverse environment URL + Client ID configured in settings
+
+**Wizard & Entity Selection:**
+
+![Dataverse Wizard](resources/demo/dv-integration-wizard.gif)
+
+**Field Mapping & Code Generation:**
+
+![Dataverse Field Mapping](resources/demo/dv-integration-field-mapping.gif)
+
+---
+
 ### 🖱️ Right-Click Context Menus
 
 - **Peek Subscribers at Cursor** — right-click any event to see all subscribers
@@ -226,6 +263,10 @@ code --install-extension al-productivity-pack-0.2.0.vsix
 | `alProductivityPack.searchPaths` | `[]` | Additional paths to scan for AL files |
 | `alProductivityPack.includeBaseApp` | `true` | Include Base Application events from `.alpackages` |
 | `alProductivityPack.autoRefresh` | `true` | Auto-refresh index when AL files change |
+| `alProductivityPack.dataverse.serviceUrl` | `""` | Dataverse environment URL (e.g. `https://org.crm8.dynamics.com`) |
+| `alProductivityPack.dataverse.clientId` | `""` | Microsoft Entra app client ID for Dataverse auth |
+| `alProductivityPack.dataverse.redirectUri` | `""` | Optional redirect URI (leave empty for default) |
+| `alProductivityPack.dataverse.altpgenPath` | `""` | Optional full path to `altpgen.exe` if auto-detection fails |
 
 ### Example settings.json
 
@@ -256,6 +297,8 @@ code --install-extension al-productivity-pack-0.2.0.vsix
 | `ALP: File Insights` | Summary of current file's AL objects |
 | `ALP: Show App Dependency Graph` | Deploy sequence visualization |
 | `ALP: Generate Page Script from Repro Steps` | Convert DSL repro steps to BC Page Script YAML |
+| `ALP: Generate Dataverse Integration Boilerplate` | Wizard-driven Dataverse coupling code generation |
+| `ALP: Clear Dataverse Credential Cache` | Clear cached Dataverse OAuth token |
 
 ---
 
@@ -272,9 +315,10 @@ code --install-extension al-productivity-pack-0.2.0.vsix
 
 - [x] **v0.1** — Event Subscriber Finder, CodeLens, Dependency Explorer, App Dependency Graph
 - [x] **v0.2** — Page Script Generator (DSL → BC Page Scripting YAML)
-- [ ] **v0.3** — Event comparison between BC versions (detect breaking changes)
-- [ ] **v0.4** — AL Test Helper tools
-- [ ] **v0.5** — Object ID conflict detection across extensions
+- [x] **v0.3** — Dataverse Integration Generator (wizard, field mapping, code generation)
+- [ ] **v0.4** — Event comparison between BC versions (detect breaking changes)
+- [ ] **v0.5** — AL Test Helper tools
+- [ ] **v0.6** — Object ID conflict detection across extensions
 - [ ] **v1.0** — Stable release with full feature set
 
 See the [CHANGELOG](CHANGELOG.md) for release history.

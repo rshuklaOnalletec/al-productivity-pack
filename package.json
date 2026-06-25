@@ -1,8 +1,8 @@
 {
   "name": "al-productivity-pack",
   "displayName": "AL Productivity Pack",
-  "description": "A suite of productivity tools for Business Central AL developers — Event Subscriber Finder, boilerplate generation, event chain visualization, Page Script generation, and more.",
-  "version": "0.2.0",
+  "description": "A suite of productivity tools for Business Central AL developers — Event Subscriber Finder, boilerplate generation, event chain visualization, Page Script generation, Dataverse integration, and more.",
+  "version": "0.3.0",
   "publisher": "RishabhShukla",
   "author": {
     "name": "Rishabh Shukla"
@@ -31,13 +31,16 @@
     "BC",
     "Dynamics 365",
     "Event Subscriber",
+    "Dataverse",
+    "CDS",
     "NAV",
     "ERP",
     "Microsoft Dynamics"
   ],
   "activationEvents": [
     "onLanguage:al",
-    "workspaceContains:**/*.al"
+    "workspaceContains:**/*.al",
+    "onCommand:alProductivityPack.generateDataverseIntegration"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -94,6 +97,16 @@
         "command": "alProductivityPack.generatePageScript",
         "title": "ALP: Generate Page Script from Repro Steps",
         "icon": "$(play-circle)"
+      },
+      {
+        "command": "alProductivityPack.generateDataverseIntegration",
+        "title": "ALP: Generate Dataverse Integration Boilerplate",
+        "icon": "$(cloud)"
+      },
+      {
+        "command": "alProductivityPack.clearDataverseCredentials",
+        "title": "ALP: Clear Dataverse Credential Cache",
+        "icon": "$(key)"
       }
     ],
     "viewsContainers": {
@@ -187,6 +200,26 @@
           "type": "boolean",
           "default": true,
           "description": "Automatically refresh the event index when AL files change."
+        },
+        "alProductivityPack.dataverse.serviceUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Default Dataverse environment URL for ALP Dataverse generator (for example: https://org.crm8.dynamics.com)."
+        },
+        "alProductivityPack.dataverse.clientId": {
+          "type": "string",
+          "default": "",
+          "description": "Default Microsoft Entra app client ID for ALP Dataverse generator."
+        },
+        "alProductivityPack.dataverse.redirectUri": {
+          "type": "string",
+          "default": "",
+          "description": "Optional redirect URI for ALP Dataverse generator (for example: http://localhost). Leave empty to let altpgen use its default behavior."
+        },
+        "alProductivityPack.dataverse.altpgenPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional full path to altpgen.exe. Use this if ALP cannot auto-locate altpgen from your AL extension installation."
         }
       }
     }
