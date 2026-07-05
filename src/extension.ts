@@ -10,6 +10,8 @@ import { AppDependencyGraph } from './features/dependencyExplorer/appDependencyG
 import { generatePageScriptCommand } from './features/pageScriptGenerator';
 import { generateDataverseIntegrationCommand } from './features/dataverseIntegration';
 import { clearDataverseTokenCache } from './features/dataverseIntegration/wizardFlow';
+import { addTelemetryAgentCommand } from './features/telemetryScaffolder/agent';
+import { initTelemetry, logUsage, logError, disposeTelemetry, TelemetryEvents } from './telemetry';
 
 let eventIndexer: EventIndexer;
 let subscriberMapper: SubscriberMapper;
@@ -17,6 +19,9 @@ let dependencyIndexer: DependencyIndexer;
 
 export async function activate(context: vscode.ExtensionContext) {
     console.log('AL Productivity Pack is now active');
+
+    // Initialize telemetry (respects user's telemetry.telemetryLevel setting)
+    initTelemetry(context);
 
     eventIndexer = new EventIndexer();
     subscriberMapper = new SubscriberMapper(eventIndexer);
@@ -41,6 +46,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // Register commands
     context.subscriptions.push(
         vscode.commands.registerCommand('alProductivityPack.findEvents', async () => {
+            logUsage(TelemetryEvents.FindEvents);
             const events = eventIndexer.getAllEvents();
             if (events.length === 0) {
                 await eventIndexer.indexWorkspace();
@@ -69,6 +75,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.findSubscribers', async () => {
+            logUsage(TelemetryEvents.FindSubscribers);
             const subscribers = subscriberMapper.getAllSubscribers();
             if (subscribers.length === 0) {
                 await eventIndexer.indexWorkspace();
@@ -97,6 +104,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.generateSubscriber', async () => {
+            logUsage(TelemetryEvents.GenerateSubscriber);
             const events = eventIndexer.getAllEvents();
             if (events.length === 0) {
                 await eventIndexer.indexWorkspace();
@@ -125,6 +133,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.showEventChain', async () => {
+            logUsage(TelemetryEvents.ShowEventChain);
             const events = eventIndexer.getAllEvents();
             const objectNames = [...new Set(events.map(e => e.objectName))];
 
@@ -168,6 +177,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.detectDeadSubscribers', async () => {
+            logUsage(TelemetryEvents.DetectDeadSubscribers);
             const deadSubscribers = subscriberMapper.findDeadSubscribers();
 
             if (deadSubscribers.length === 0) {
@@ -197,6 +207,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.fileInsights', async () => {
+            logUsage(TelemetryEvents.FileInsights);
             const editor = vscode.window.activeTextEditor;
             if (!editor || editor.document.languageId !== 'al') { return; }
 
@@ -342,6 +353,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.showAppDependencyGraph', async () => {
+            logUsage(TelemetryEvents.ShowAppDependencyGraph);
             const graph = new AppDependencyGraph();
             const result = await graph.buildGraph();
 
@@ -372,15 +384,23 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.refreshIndex', async () => {
+            const startTime = Date.now();
             await eventIndexer.indexWorkspace();
             await dependencyIndexer.indexWorkspace();
             treeProvider.refresh();
             codeLensProvider.refresh();
             dependencyTreeProvider.refresh();
+            const duration = Date.now() - startTime;
+            logUsage(TelemetryEvents.RefreshIndex, {
+                durationMs: duration,
+                eventCount: eventIndexer.getAllEvents().length,
+                subscriberCount: subscriberMapper.getAllSubscribers().length,
+            });
             vscode.window.showInformationMessage('AL index refreshed (events + dependencies).');
         }),
 
         vscode.commands.registerCommand('alProductivityPack.peekSubscribersAtCursor', async () => {
+            logUsage(TelemetryEvents.PeekSubscribersAtCursor);
             const editor = vscode.window.activeTextEditor;
             if (!editor) { return; }
 
@@ -445,6 +465,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.peekDependenciesAtCursor', async () => {
+            logUsage(TelemetryEvents.PeekDependenciesAtCursor);
             const editor = vscode.window.activeTextEditor;
             if (!editor) { return; }
 
@@ -565,6 +586,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
 
         vscode.commands.registerCommand('alProductivityPack.generateSubscriberForEvent', async (objectName: string, eventName: string) => {
+            logUsage(TelemetryEvents.GenerateSubscriberForEvent);
             // Find the event details
             const event = eventIndexer.getAllEvents().find(e =>
                 e.objectName === objectName && e.eventName === eventName
@@ -603,25 +625,37 @@ export async function activate(context: vscode.ExtensionContext) {
             }
         }),
 
-        vscode.commands.registerCommand('alProductivityPack.generatePageScript', generatePageScriptCommand),
+        vscode.commands.registerCommand('alProductivityPack.generatePageScript', () => {
+            logUsage(TelemetryEvents.GeneratePageScript);
+            return generatePageScriptCommand();
+        }),
 
         vscode.commands.registerCommand('alProductivityPack.generateDataverseIntegration', async () => {
+            logUsage(TelemetryEvents.GenerateDataverseIntegration);
             try {
                 vscode.window.showInformationMessage('ALP Dataverse wizard started.');
                 await generateDataverseIntegrationCommand();
             } catch (error) {
                 const message = error instanceof Error ? error.message : String(error);
+                logError(TelemetryEvents.CommandError, error instanceof Error ? error : undefined, { command: 'generateDataverseIntegration' });
                 vscode.window.showErrorMessage(`ALP Dataverse command failed: ${message}`);
                 console.error('ALP Dataverse command failed:', error);
             }
         }),
 
         vscode.commands.registerCommand('alProductivityPack.clearDataverseCredentials', () => {
+            logUsage(TelemetryEvents.ClearDataverseCredentials);
             clearDataverseTokenCache();
+        }),
+
+        vscode.commands.registerCommand('alProductivityPack.addTelemetry', async () => {
+            logUsage(TelemetryEvents.AddTelemetry);
+            await addTelemetryAgentCommand();
         })
     );
 
     // Load index from cache on activation, or re-index if no cache exists
+    const activationStart = Date.now();
     const eventsLoaded = await eventIndexer.loadFromCache();
     const depsLoaded = await dependencyIndexer.loadFromCache();
 
@@ -638,6 +672,11 @@ export async function activate(context: vscode.ExtensionContext) {
         eventIndexer.indexWorkspace().then(() => {
             treeProvider.refresh();
             codeLensProvider.refresh();
+            logUsage(TelemetryEvents.IndexingCompleted, {
+                source: 'events',
+                durationMs: Date.now() - activationStart,
+                count: eventIndexer.getAllEvents().length,
+            });
         });
     }
     if (!depsLoaded) {
@@ -645,6 +684,11 @@ export async function activate(context: vscode.ExtensionContext) {
             dependencyTreeProvider.refresh();
         });
     }
+
+    logUsage(TelemetryEvents.Activated, {
+        cachedEvents: eventsLoaded,
+        cachedDeps: depsLoaded,
+    });
 }
 
 function getEventChainHtml(objectName: string, events: { eventName: string; line: number; eventType: string; parameters: string; source: string; subscriberCount: number; subscribers: { procedureName: string; filePath: string; source: string; line: number }[] }[]): string {
@@ -789,5 +833,5 @@ function escapeHtml(text: string): string {
 }
 
 export function deactivate() {
-    // Cleanup
+    disposeTelemetry();
 }

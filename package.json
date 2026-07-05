@@ -42,6 +42,7 @@
     "workspaceContains:**/*.al",
     "onCommand:alProductivityPack.generateDataverseIntegration"
   ],
+  "telemetry": true,
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -107,6 +108,11 @@
         "command": "alProductivityPack.clearDataverseCredentials",
         "title": "ALP: Clear Dataverse Credential Cache",
         "icon": "$(key)"
+      },
+      {
+        "command": "alProductivityPack.addTelemetry",
+        "title": "ALP: Add Telemetry (AI)",
+        "icon": "$(sparkle)"
       }
     ],
     "viewsContainers": {
@@ -173,6 +179,11 @@
           "command": "alProductivityPack.showEventChain",
           "when": "editorLangId == al",
           "group": "alProductivityPack@4"
+        },
+        {
+          "command": "alProductivityPack.addTelemetry",
+          "when": "editorLangId == al",
+          "group": "alProductivityPack@5"
         }
       ],
       "editor/title": [
