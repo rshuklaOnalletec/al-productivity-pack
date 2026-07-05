@@ -229,6 +229,26 @@ Generate complete Dataverse integration boilerplate — coupling codeunit, list 
 
 ---
 
+### 🤖 AI Telemetry Agent
+
+Intelligently instruments your AL code with Microsoft-recommended `FeatureTelemetry` calls — powered by Copilot's language model.
+
+**Command:** `ALP: Add Telemetry (AI)`
+
+- **Scope choice** — analyze the active file or scan the entire project
+- **Auto-detects feature names** from AL object declarations (no manual input needed)
+- **Smart classification** — reads each procedure's code to decide what telemetry is appropriate
+- **Specific event names** — generates descriptions like "Item UOM inserted", not generic "Records processed"
+- **CustomDimensions** — always includes relevant context (record IDs, key fields, counts)
+- **Inline preview** — proposed lines highlighted green in the editor; browse freely before deciding
+- **Accept / Discard** — persistent status bar buttons; nothing is saved until you explicitly accept
+- Handles `case...of` blocks, nested begin/end, and proper procedure boundary detection
+- Follows Microsoft guidelines: `FeatureTelemetry.LogUsage`, `LogError` (only in existing error paths), `LogUptake`
+
+![AI Telemetry Agent](resources/demo/telemetry-agent.gif)
+
+---
+
 ### 🖱️ Right-Click Context Menus
 
 - **Peek Subscribers at Cursor** — right-click any event to see all subscribers
@@ -299,6 +319,7 @@ code --install-extension al-productivity-pack-0.2.0.vsix
 | `ALP: Generate Page Script from Repro Steps` | Convert DSL repro steps to BC Page Script YAML |
 | `ALP: Generate Dataverse Integration Boilerplate` | Wizard-driven Dataverse coupling code generation |
 | `ALP: Clear Dataverse Credential Cache` | Clear cached Dataverse OAuth token |
+| `ALP: Add Telemetry (AI)` | AI-powered telemetry instrumentation with preview |
 
 ---
 
@@ -316,7 +337,7 @@ code --install-extension al-productivity-pack-0.2.0.vsix
 - [x] **v0.1** — Event Subscriber Finder, CodeLens, Dependency Explorer, App Dependency Graph
 - [x] **v0.2** — Page Script Generator (DSL → BC Page Scripting YAML)
 - [x] **v0.3** — Dataverse Integration Generator (wizard, field mapping, code generation)
-- [ ] **v0.4** — Event comparison between BC versions (detect breaking changes)
+- [x] **v0.4** — AI Telemetry Agent (project-wide analysis, inline preview, accept/discard)
 - [ ] **v0.5** — AL Test Helper tools
 - [ ] **v0.6** — Object ID conflict detection across extensions
 - [ ] **v1.0** — Stable release with full feature set
